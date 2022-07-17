@@ -22,6 +22,7 @@ const StateContext = ({children}) => {
     }
 
     const onAdd = (product, quantity) => {
+        console.log(product)
         const checkProductInCart = cartItems.find((item) => item._id === product._id)
 
         setTotalPrice((prevTotalPrice) => prevTotalPrice + (product.price * quantity))
@@ -45,6 +46,35 @@ const StateContext = ({children}) => {
         toast.success(`${qty} ${product.name} added to the cart.`)
     }
 
+    const toggleCartItemQuantity = (id , value) => {
+        const findProduct = cartItems.find((item) => item._id === id)
+        const ProdIndex = cartItems.findIndex((prod) => prod._id === id)
+        //? delete old product below JUST delete not append yet (params 3)
+        const newCartItems = cartItems.filter((item) => item._id !== id)
+        //? Copy [returns spliced items]
+        const UpdateProd = newCartItems.splice(0) //* output []
+        //* This for fix the order of product (correct position problem)
+
+        if(value === 'plus'){
+            UpdateProd.splice(ProdIndex , 0 ,{...findProduct , quantity: findProduct.quantity + 1})
+            // const UpdateProd = newCartItems.splice(ProdIndex , 0 ,{...findProduct , quantity: findProduct.quantity + 1})
+            // const UpdateQuantP = [...newCartItems , {...findProduct , quantity: findProduct.quantity + 1}]
+            setCartItems(UpdateProd)
+            setTotalPrice(prevPrice => prevPrice + findProduct.price)
+            setTotalQuantities(prevQuan => prevQuan + 1)
+
+        } else if(value === 'minus'){
+            // * Check minus quant min 1 or cancel (0 item)
+            if(findProduct.quantity > 1){
+                // const UpdateQuantM = [...newCartItems , {...findProduct , quantity: findProduct.quantity - 1}]
+                UpdateProd.splice(ProdIndex , 0 ,{...findProduct , quantity: findProduct.quantity - 1})
+                setCartItems(UpdateProd)
+                setTotalPrice(prevPrice => prevPrice - findProduct.price)
+                setTotalQuantities(prevQuan => prevQuan - 1)
+            }
+        }
+    }
+
 
   return (
     <Context.Provider value={{
@@ -57,6 +87,7 @@ const StateContext = ({children}) => {
         incQty,
         decQty,
         onAdd,
+        toggleCartItemQuantity,
     }}
     >
         {children}

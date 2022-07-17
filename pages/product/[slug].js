@@ -5,12 +5,11 @@ import Product from '../../components/Product'
 import { useStateContext } from '../../context/StateContext'
 
 const ProductDetails = ({ product , products }) => {
-    const { image, name, details, price } = product[0]
+    const { image, name, details, price } = product
     const [index, setIndex] = useState(0)
 
 
     const { decQty , incQty, qty, onAdd } = useStateContext()
-
   return (
     <div>
         <div className='product-detail-container'>
@@ -73,16 +72,15 @@ const ProductDetails = ({ product , products }) => {
                       >
                         <AiOutlinePlus />
                       </span>
-                    </p>
-                  </div>
+                  </p>
+                </div>
 
-                  {console.log(product)}
 
                 <div className='buttons'>
                     <button 
                       type='button' 
                       className='add-to-cart'
-                      onClick={() => onAdd(product[0], qty)}
+                      onClick={() => onAdd(product, qty)}
                     >Add to Cart</button> 
                     <button 
                       type='button' 
@@ -141,7 +139,7 @@ export const getStaticPaths = async () => {
 
 
 export const getStaticProps = async ({ params: { slug } }) => {
-    const specQuery = `*[_type == "product" && slug.current == '${slug}']`
+    const specQuery = `*[_type == "product" && slug.current == '${slug}'][0]`
     const product = await client.fetch(specQuery)
     //* this return array [{...}] we want obj so sel index 0
 
