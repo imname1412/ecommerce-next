@@ -1,15 +1,22 @@
-import React , { useState } from 'react'
+import React , { useState , useEffect } from 'react'
 import { client , urlFor } from '../../lib/client'
 import { AiOutlineMinus, AiOutlinePlus, AiFillStar, AiOutlineStar  } from 'react-icons/ai'
 import Product from '../../components/Product'
 import { useStateContext } from '../../context/StateContext'
+import { useRouter } from 'next/router'
 
 const ProductDetails = ({ product , products }) => {
+    const route = useRouter()
+
     const { image, name, details, price } = product
     const [index, setIndex] = useState(0)
 
+    const { decQty , incQty, qty, onAdd , setQty } = useStateContext()
 
-    const { decQty , incQty, qty, onAdd } = useStateContext()
+
+    useEffect(() => {
+      setQty(1)
+    },[route])
   return (
     <div>
         <div className='product-detail-container'>
@@ -62,7 +69,6 @@ const ProductDetails = ({ product , products }) => {
                   </span>
                   <span 
                     className='num'
-                    onClick={() => {}}
                   >
                     {qty}
                   </span>

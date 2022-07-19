@@ -12,7 +12,7 @@ const Cart = () => {
 
   const cartRef = useRef()
 
-  const { totalPrice, totalQuantities, cartItems, setShowCart, toggleCartItemQuantity} = useStateContext()
+  const { totalPrice, totalQuantities, cartItems, setShowCart, toggleCartItemQuantity, onRemove} = useStateContext()
 
   return (
     <div className='cart-wrapper' ref={cartRef}>
@@ -64,7 +64,7 @@ const Cart = () => {
                   <div>
                     <p className='quantity-desc'>
                     <span className='minus'
-                      onClick={() => toggleCartItemQuantity(item._id , 'minus')}
+                      onClick={() => toggleCartItemQuantity(item._id , "minus")}
                     >
                       <AiOutlineMinus />
                     </span>
@@ -72,14 +72,18 @@ const Cart = () => {
                       {item.quantity}
                     </span>
                     <span className='plus'
-                      onClick={() => toggleCartItemQuantity(item._id , 'plus')}
+                      onClick={() => toggleCartItemQuantity(item._id , "plus")}
                     >
                           <AiOutlinePlus />
                     </span>
                     </p>
                   </div>
                   
-                  <button type='button' className='remove-item'>
+                  <button 
+                    type='button' 
+                    className='remove-item'
+                    onClick={() => onRemove(item._id )}
+                  >
                     <TiDeleteOutline />
                   </button>
                 </div>
@@ -99,7 +103,7 @@ const Cart = () => {
                 <button
                   type='button'
                   className='btn'
-                  onClick=''
+                  onClick={() => {}}
                 >
                   Pay with Stripe
                 </button>
